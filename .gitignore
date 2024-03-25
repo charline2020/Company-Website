@@ -1,2 +1,5 @@
 test.html
 banner.pptx
+**/.DS_Store
+**/node_modules
+.gitignore
