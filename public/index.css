@@ -9,38 +9,87 @@
 
 .home-article {
   width: 100%;
-  height: 2685px;
+  height: 1900px;
   display: flex;
   overflow: hidden;
   position: relative;
   align-items: flex-end;
   flex-shrink: 0;
   justify-content: center;
-  background-color: rgba(255, 255, 255, 1);
+  /* background-color: rgb(193, 24, 24); */
 }
 
 .home-navigation {
   top: 0px;
   left: 0px;
   width: 100%;
-  height: 25%;
+  height: 30em;
   display: flex;
   overflow: hidden;
   position: absolute;
   align-items: flex-start;
   flex-shrink: 0;
-  background-color: rgba(190, 190, 190, 1);
+  /* background-color: rgb(78, 210, 116); */
+}
+
+.home-product {
+  top: 30em;
+  left: 0px;
+  width: 100%;
+  height: 30em;
+  display: flex;
+  overflow: hidden;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+  background-color: rgb(142, 78, 210);
+}
+
+.home-history {
+  top: 60em;
+  left: 0px;
+  width: 100%;
+  height: 20em;
+  display: flex;
+  overflow: hidden;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+  background-color: rgb(210, 78, 109);
+}
+.home-contactus {
+  top: 80em;
+  left: 0px;
+  width: 100%;
+  height: 30em;
+  display: flex;
+  overflow: hidden;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+  background-color: rgb(80, 78, 210);
+}
+.home-footer {
+  top: 110em;
+  left: 0px;
+  width: 100%;
+  height: 20em;
+  display: flex;
+  overflow: hidden;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+  background-color: rgb(13, 13, 17);
 }
 
 .home-text {
-  top: 20px;
+  top: 10px;
   left: 50px;
-  color: #f4f2f2;
+  color: #616161;
   width: var(--dl-size-size-large);
   height: auto;
   margin: auto;
   position: absolute;
-  font-size: 48px;
   font-style: Medium;
   text-align: center;
   font-family: Inter;
@@ -48,7 +97,18 @@
   line-height: 150%;
   font-stretch: normal;
   text-decoration: none;
+  font-size:4vw
 }
+
+.banner {
+  margin-top:7%;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+/* ================================================== */
+
+
 
 .home-cards {
   gap: 32px;
