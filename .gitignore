@@ -1,6 +1,5 @@
 test.html
-banner.pptx
-**/.DS_Store
+*.DS_Store
 **/node_modules
 *.jpg
 *.pptx
