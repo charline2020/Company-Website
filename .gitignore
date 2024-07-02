@@ -1,7 +1,4 @@
-test.html
 **/.DS_Store
 node_modules
-*.jpg
-*.pptx
 .gitignore
 tmp
