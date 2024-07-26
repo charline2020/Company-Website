@@ -2,57 +2,74 @@
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-
-const indexRouter = require('./routes/web/index');
+const logger = require('morgan');
 const session = require('express-session');
-const mongostore = require('connect-mongo');
-const { DBHOST, DBPORT, DBNAME } = require('./config/config');
+const MongoStore = require('connect-mongo');
+const mongoose = require('mongoose');
+const { DBHOST, DBPORT, DBNAME, SESSION_SECRET } = require('./config/config');
+const indexRouter = require('./routes/web/index');
+
 const app = express();
 
+// Connect to MongoDB
+mongoose.connect(`mongodb://${DBHOST}:${DBPORT}/${DBNAME}`, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 30000 // Increase if necessary
+}).then(() => {
+  console.log('MongoDB connected');
+}).catch(err => {
+  console.error('MongoDB connection error:', err.message);
+});
+
+// Session configuration
 app.use(session({
-    name: 'connect.sid',
-    secret: 'Hachi',
-    saveUninitialized: false,
-    resave: true,
-    store: mongostore.create({
-        mongoUrl: `mongodb://${DBHOST}:${DBPORT}/${DBNAME}`
-    }),
-    cookie: {
-        httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
-    },
-}))
+  name: 'connect.sid',
+  secret: SESSION_SECRET || 'default_secret', // Use the session secret from config
+  saveUninitialized: false,
+  resave: false, // Typically set to false to avoid unnecessary saves
+  store: MongoStore.create({
+    mongoUrl: `mongodb://${DBHOST}:${DBPORT}/${DBNAME}`,
+    mongooseConnection: mongoose.connection // Optional: use existing Mongoose connection
+  }),
+  cookie: {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production', // Set to true if using HTTPS in production
+    maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+  }
+}));
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// website page
+// Website page
 app.use('/', indexRouter);
 
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-    res.render('404');
+// Catch 404 and forward to error handler
+app.use((req, res, next) => {
+  res.status(404);
+  res.render('404');
 });
 
-// error handler
-app.use(function (err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
+// Error handler
+app.use((err, req, res, next) => {
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-    // render the error page
-    res.status(err.status || 500);
-    res.render('error');
+  res.status(err.status || 500);
+  res.render('error', { // Render a more generic error page for internal server errors
+    message: 'Something went wrong!',
+    error: res.locals.error
+  });
 });
 
-module.exports = app;
-
-port = 3000
+const port = process.env.PORT || 3000; // Use environment variable for port
 app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
+  console.log(`Server is running at http://localhost:${port}`);
 });
