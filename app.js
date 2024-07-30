@@ -13,13 +13,17 @@ const app = express();
 
 // Connect to MongoDB
 mongoose.connect(`mongodb://${DBHOST}:${DBPORT}/${DBNAME}`, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+  // useNewUrlParser: true,
+  // useUnifiedTopology: true,
   serverSelectionTimeoutMS: 30000 // Increase if necessary
 }).then(() => {
   console.log('MongoDB connected');
 }).catch(err => {
-  console.error('MongoDB connection error:', err.message);
+  // console.error('MongoDB connection error:', err.message);
+  res.render('error', { // Render a more generic error page for internal server errors
+    message: 'Oops! We are currently experiencing technical difficulties.',
+    redirectUrl: '/'
+  })
 });
 
 // Session configuration
@@ -53,20 +57,22 @@ app.use('/', indexRouter);
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {
-  res.status(404);
-  res.render('404');
+  res.render('error', { // Render a more generic error page for internal server errors
+    message: 'Oops! Something went wrong.',
+    redirectUrl: '/'
+  })
 });
 
 // Error handler
 app.use((err, req, res, next) => {
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  // res.locals.message = err.message;
+  // res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   res.status(err.status || 500);
   res.render('error', { // Render a more generic error page for internal server errors
-    message: 'Something went wrong!',
-    error: res.locals.error
-  });
+    message: 'Oops! We are currently experiencing technical difficulties.',
+    redirectUrl: '/'
+  })
 });
 
 const port = process.env.PORT || 3000; // Use environment variable for port

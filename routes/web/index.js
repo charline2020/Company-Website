@@ -18,7 +18,6 @@ router.post('/submit', async (req, res) => {
 
     // Use `contactFormModel.create()` to save the data
     await contactFormModel.create({ name, email, message });
-
     // Render success page
     res.render('success', {
       message: 'Message received!',

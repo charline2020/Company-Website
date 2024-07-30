@@ -1,3 +1,21 @@
-<h1><%= message %></h1>
-<h2><%= error.status %></h2>
-<pre><%= error.stack %></pre>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Error</title>
+  <link rel="stylesheet" href="/css/alertpage.css">
+</head>
+<body>
+  <div class="container">
+    <div class="alert alert-success" role="alert">
+      <h1> <%= message %> </h1>
+      <h2>Please reach out to us at [email address] for assistance.</h2>
+      <h2> Thank you for your patience!</h2>
+      <br>
+      <a href="<%= redirectUrl %>"><p>Back to Home Page </p></a>
+    </div>
+  </div>
+</body>
+</html>
