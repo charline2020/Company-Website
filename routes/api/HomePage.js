@@ -10,13 +10,16 @@ router.use(bodyParser.urlencoded({ extended: false }));
 // Validation Array
 var inputValidate = [
   // Check email
-  check('name').trim().isLength({ min: 2, max: 10 }).isString()  
-  .matches(/^[A-Za-z\s]+$/),
-  
+  check('name').trim().isLength({ min: 2, max: 10 }).isString()
+  .withMessage('Name must be between 2 and 10 characters long.')
+  .matches(/^[A-Za-z\s]+$/).withMessage('Name can only contain letters and spaces.'),
+
   check('email','Must Be an Email Address').isEmail()
   .trim().escape().normalizeEmail(),
 
-  check('message').trim().isLength({ min: 5, max: 200 }).matches(/^[A-Za-z\s]+$/).escape()
+  check('message').trim().isLength({ min: 5, max: 200 }).matches(/^[A-Za-z\s]+$/).isString()
+  .withMessage('Message must be between 5 and 200 characters long.')
+  .escape()
   ];
 
 router.get('/', (req, res) => {
@@ -28,31 +31,28 @@ router.post('/submit', inputValidate, async (req, res) => {
   try {
     const { name, email, message } = req.body;
 
-    // Validate data
-    // if (!name || !email || !message) {
-    //   return res.status(400).render('error', { message: 'All fields are required.' });
-    // }
-
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      // return res.status(422).json({ errors: errors.array() });
-      return res.status(422).render('form-error',{ 
-        message: 'Please check Name, Email, Message are all correct.',
-        redirectUrl: '/'
-      });
+      return res.status(422).json({ errors: errors.array() });
     }
-
+    
     // Use `contactFormModel.create()` to save the data
     await contactFormModel.create({ name, email, message });
-    // Render success page
-    res.render('success', {
-      message: 'Message received!',
-      redirectUrl: '/' // Adjust if necessary
-    });
+    res.json({
+        code: '0000', //status 200 * 100 or 0000 or 000000
+        msg: 'Successfully create',
+        name: name,
+        email: email,
+        message: message
+    }
+    );
   } catch (err) {
-    console.error('Error adding contact form entry:', err);
-    res.status(500).render('error', {
-      message: 'Failed to add contact form entry. Please try again later.'
+    res.json({
+        code: '1002',
+        msg: 'Failed to add contact form entry. Please try again later.',
+        name: null,
+        email: null,
+        message: null
     });
   }
 });

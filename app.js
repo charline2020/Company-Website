@@ -8,7 +8,7 @@ const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
 const { DBHOST, DBPORT, DBNAME, SESSION_SECRET } = require('./config/config');
 const indexRouter = require('./routes/web/index');
-
+const indexApiRouter = require('./routes/api/HomePage')
 const app = express();
 
 // Connect to MongoDB
@@ -54,6 +54,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Website page
 app.use('/', indexRouter);
+app.use('/api', indexApiRouter);
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {
